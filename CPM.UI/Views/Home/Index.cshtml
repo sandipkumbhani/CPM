@@ -1,8 +1,19 @@
 ﻿@{
+    Layout = "_Layout";
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+    </head>
+    <body>
+        <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6">
+            <div>
+            <a href="https://localhost:7240/home/Register"><button class="btn btn-primary w-14 mt-5">Register</button></a>
+            </div>
+        </div>
+    </body>
+</html>

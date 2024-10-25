@@ -1,0 +1,62 @@
+﻿@{
+    
+    ViewData["Title"] = "Home Page";
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~\css\style.css" rel="stylesheet" />
+    <title>Register</title>
+</head> 
+<body>
+    <!--  Body Wrapper -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" style="margin-left:210px; margin-top:0px;">
+        <div class="position-relative overflow-hidden radial-gradient min-vh-100 min-vw-100 d-flex align-items-center justify-content">
+            <div class="d-flex align-items-center justify-content-center w-50">
+                <div class="row justify-content-center w-100">
+                    <div class="col-md-8 col-lg-8 col-xxl-3">
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <p class="text-center fs-3">Register</p>
+                                <form method="post" asp-action="Register" asp-controller="home">
+                                    <div class="mb-2">
+                                        <label  class="control-label">Clinic Name</label>
+                                        <input  class="form-control" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label  class="control-label">Doctor Name</label>
+                                        <input  class="form-control" />
+                                    </div>
+                                    <div class="mb-2">
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option selected>Skill</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                        </select>
+                                    </div> 
+                                    <div class="mb-2">
+                                        <label class="control-label">Email</label>
+                                        <input class="form-control" />
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="control-label">Phone No.</label>
+                                        <input class="form-control" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="control-label">Address</label>
+                                        <input class="form-control" />
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

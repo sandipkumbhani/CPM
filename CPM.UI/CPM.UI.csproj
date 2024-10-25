@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\Style.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CPM.UI.Application\CPM.UI.Application.csproj" />
     <ProjectReference Include="..\CPM.UI.Inftrastucture\CPM.UI.Inftrastucture.csproj" />
   </ItemGroup>
