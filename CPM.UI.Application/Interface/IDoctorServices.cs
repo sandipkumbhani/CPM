@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace CPM.UI.Application.Interface
 {
-    public interface IRegisterServices
+    public interface IDoctorServices
     {
-        Task<string> Register(RegisterDto model);
+        Task<string> Add(DoctorMasterDto model);
     }
 }

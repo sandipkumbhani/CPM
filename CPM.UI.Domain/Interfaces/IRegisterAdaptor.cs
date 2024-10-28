@@ -9,6 +9,6 @@ namespace CPM.UI.Domain.Interfaces
 {
     public interface IRegisterAdaptor
     {
-        Task<string> RegisterAsync(RegisterViewModel model);
+        Task<string> RegisterAsync(RegisterDto model);
     }
 }

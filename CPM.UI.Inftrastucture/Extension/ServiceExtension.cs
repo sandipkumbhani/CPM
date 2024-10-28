@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CPM.UI.Domain.Interfaces;
+using CPM.UI.Inftrastucture.Provider;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,10 @@ namespace CPM.UI.Inftrastucture.Extension
     {
         public static IServiceCollection AddEfcoreInfrastrucureService(this IServiceCollection services)
         {
+            services.AddScoped<IRegisterAdaptor, RegisterAdaptor>();
+            services.AddScoped<ILoginAdaptor, LoginAdaptor>();
+            services.AddScoped<IClinicAdaptor, ClinicAdaptor>();
+            services.AddScoped<IDoctorAdaptor, DoctorAdaptor>();
             return services;
         }
     }

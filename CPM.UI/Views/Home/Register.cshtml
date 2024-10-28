@@ -1,6 +1,7 @@
-﻿@{
+﻿
+@{
     
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Register";
 }
 <!doctype html>
 <html>
@@ -22,32 +23,32 @@
                                 <p class="text-center fs-3">Register</p>
                                 <form method="post" asp-action="Register" asp-controller="home">
                                     <div class="mb-2">
-                                        <label  class="control-label">Clinic Name</label>
-                                        <input  class="form-control" />
+                                        <label for="ClinicName" class="control-label">Clinic Name</label>
+                                        <input class="form-control" id="ClinicName" name="ClinicName" />
                                     </div>
                                     <div class="mb-3">
-                                        <label  class="control-label">Doctor Name</label>
-                                        <input  class="form-control" />
+                                        <label for="DoctorName" class="control-label">Doctor Name</label>
+                                        <input class="form-control" id="DoctorName" name="DoctorName" />
                                     </div>
                                     <div class="mb-2">
-                                        <select class="form-select" aria-label="Default select example">
+                                        <select class="form-select" aria-label="Default select example" id="SkillId" name="SkillId">
                                             <option selected>Skill</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            <option value="1">Psychiatrist</option>
+                                            <option value="2">Orthopaedist</option>
+                                            <option value="3">Neurologist</option>
                                         </select>
                                     </div> 
                                     <div class="mb-2">
-                                        <label class="control-label">Email</label>
-                                        <input class="form-control" />
+                                        <label class="control-label" for="Email">Email</label>
+                                        <input  class="form-control" / id="Email" name="Email">
                                     </div>
                                     <div class="mb-2">
-                                        <label class="control-label">Phone No.</label>
-                                        <input class="form-control" />
+                                        <label class="control-label" for="PhoneNumber">Phone No.</label>
+                                        <input class="form-control" id="PhoneNumber" name="PhoneNumber" />
                                     </div>
                                     <div class="mb-3">
-                                        <label class="control-label">Address</label>
-                                        <input class="form-control" />
+                                        <label class="control-label" for="Address">Address</label>
+                                        <input class="form-control" id="Address" name="Address" />
                                     </div>
                                     <button type="submit" class="btn btn-primary w-100">Save</button>
                                 </form>

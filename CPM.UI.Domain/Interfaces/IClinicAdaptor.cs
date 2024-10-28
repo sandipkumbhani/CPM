@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CPM.UI.Application.Interface
+namespace CPM.UI.Domain.Interfaces
 {
-    public interface IRegisterServices
+    public interface IClinicAdaptor
     {
-        Task<string> Register(RegisterDto model);
+        Task<string> Addasync(ClinicMasterDto model);
     }
 }

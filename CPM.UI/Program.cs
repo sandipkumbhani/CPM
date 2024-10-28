@@ -1,7 +1,12 @@
+using CPM.UI.Application.Extension;
+using CPM.UI.Inftrastucture.Extension;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddApplicationService();
+builder.Services.AddEfcoreInfrastrucureService();
 
 var app = builder.Build();
 

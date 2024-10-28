@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CPM.UI.Application.Interface;
+using CPM.UI.Application.Service;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,11 @@ namespace CPM.UI.Application.Extension
     { 
         public static IServiceCollection AddApplicationService(this IServiceCollection services)
         {
-
+            
+            services.AddScoped<IRegisterServices, RegisterServices>();
+            services.AddScoped<ILoginServices, LoginServices>();
+            services.AddScoped<IClinicServices, ClinicServices>();
+            services.AddScoped<IDoctorServices, DoctorServices>();
             return services;
         }
     }

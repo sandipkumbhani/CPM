@@ -16,7 +16,7 @@ namespace CPM.UI.Application.Service
         {
             _registerAdaptor = registerAdaptor;
         }
-        public Task<string> Register(RegisterViewModel model)
+        public Task<string> Register(RegisterDto model)
         {
             return  _registerAdaptor.RegisterAsync(model);
         }
