@@ -18,6 +18,7 @@ namespace CPM.UI.Application.Extension
             services.AddScoped<ILoginServices, LoginServices>();
             services.AddScoped<IClinicServices, ClinicServices>();
             services.AddScoped<IDoctorServices, DoctorServices>();
+            services.AddScoped<IEmailSendService, EmailSendService>();
             return services;
         }
     }

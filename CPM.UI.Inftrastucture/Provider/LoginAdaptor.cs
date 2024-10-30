@@ -22,18 +22,19 @@ namespace CPM.UI.Inftrastucture.Provider
         {
             try
             {
-               // _httpClient = new HttpClient();
-                var baseUrl = "";
+                // _httpClient = new HttpClient();
+                var baseUrl = "https://localhost:7272/api/Login";
+
                 var company = JsonConvert.SerializeObject(model);
                 var requestContent = new StringContent(company, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(baseUrl, requestContent);
                 var responseData = await response.Content.ReadAsStringAsync();
                 var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);
-
-                if (responseModel?.Data != null)
+                if (responseModel != null)
                 {
-                    var responseToken = JsonConvert.DeserializeObject<ResponseToken>(responseModel.Data.ToString());
-                    return responseToken?.Token ?? string.Empty;
+                    var responseToken = JsonConvert.DeserializeObject<ResponseToken>(responseModel?.Data.ToString()!);
+                    return responseToken.Token;
+
                 }
                 return string.Empty;
             }

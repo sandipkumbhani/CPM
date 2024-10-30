@@ -16,27 +16,20 @@ namespace CPM.UI.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IRegisterServices _registerServices;
         private readonly ILoginServices _loginServices;
+        private readonly IEmailSendService _emailSendService;
 
-        public HomeController(ILogger<HomeController> logger, IRegisterServices registerServices, ILoginServices loginServices)
+        public HomeController(ILogger<HomeController> logger, IRegisterServices registerServices, ILoginServices loginServices, IEmailSendService emailSendService)
         {
             _logger = logger;
             _registerServices = registerServices;
             _loginServices = loginServices;
+            _emailSendService = emailSendService;
         }
         public IActionResult Index()    
         {
             return View();
         }
-        public static class PasswordGenerator
-        {
-            public static string GenerateRandomPassword(int length = 8)
-            {
-                const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-                Random random = new Random();
-                return new string(Enumerable.Repeat(validChars, length)
-                    .Select(s => s[random.Next(s.Length)]).ToArray());
-            }
-        }
+        
         public IActionResult Register()
         {
             return View();
@@ -46,12 +39,6 @@ namespace CPM.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                //string password = PasswordGenerator.GenerateRandomPassword();
-                //// string subject = "Password";
-                //string body = password;
-                //await _emailService.SendEmail(model.Email, body);
-
-
                 var User = new RegisterDto
                 {
                     ClinicName = model.ClinicName,
@@ -62,7 +49,7 @@ namespace CPM.UI.Controllers
                     Address = model.Address,
                 };
                  await _registerServices.Register(User);
-                
+                _emailSendService.SendEmail(model.Email);
                 return RedirectToAction("Login");
             }
             return View();
