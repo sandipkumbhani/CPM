@@ -6,16 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace CPM.UI.Inftrastucture.Provider
 {
     public class RegisterAdaptor : IRegisterAdaptor
     {
+        private HttpClient _httpClient;
         public async Task<string> RegisterAsync(RegisterDto model)
         {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-            var _httpClient = new HttpClient();
-            var baseUrl = "https://localhost:5001/api/Register";  // Web API Register URL
+             _httpClient = new HttpClient();
+            var baseUrl = "https://localhost:5001/api/Register";  
 
             var user = JsonConvert.SerializeObject(model);
             var requestContent = new StringContent(user, Encoding.UTF8, "application/json"); 
@@ -26,7 +28,7 @@ namespace CPM.UI.Inftrastucture.Provider
             {
                 var result = responseModel.StatusCode;
                 return "Success";
-            }
+            }   
             return null;
         }
     }

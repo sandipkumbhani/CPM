@@ -1,13 +1,16 @@
 using CPM.UI.Application.Interface;
 using CPM.UI.Application.Service;
 using CPM.UI.Domain.Model;
+//using CPM.UI.Inftrastucture.SendPassword;
 using CPM.UI.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net;
 
 namespace CPM.UI.Controllers
-{
+{  
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -24,6 +27,16 @@ namespace CPM.UI.Controllers
         {
             return View();
         }
+        public static class PasswordGenerator
+        {
+            public static string GenerateRandomPassword(int length = 8)
+            {
+                const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                Random random = new Random();
+                return new string(Enumerable.Repeat(validChars, length)
+                    .Select(s => s[random.Next(s.Length)]).ToArray());
+            }
+        }
         public IActionResult Register()
         {
             return View();
@@ -33,6 +46,12 @@ namespace CPM.UI.Controllers
         {
             if (ModelState.IsValid)
             {
+                //string password = PasswordGenerator.GenerateRandomPassword();
+                //// string subject = "Password";
+                //string body = password;
+                //await _emailService.SendEmail(model.Email, body);
+
+
                 var User = new RegisterDto
                 {
                     ClinicName = model.ClinicName,
@@ -42,8 +61,8 @@ namespace CPM.UI.Controllers
                     PhoneNumber = model.PhoneNumber,
                     Address = model.Address,
                 };
-                await _registerServices.Register(User);
-
+                 await _registerServices.Register(User);
+                
                 return RedirectToAction("Login");
             }
             return View();

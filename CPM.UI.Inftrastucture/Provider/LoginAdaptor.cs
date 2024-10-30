@@ -11,23 +11,29 @@ namespace CPM.UI.Inftrastucture.Provider
 {
     public class LoginAdaptor : ILoginAdaptor
     {
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
+
+        public LoginAdaptor(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public async Task<string> PostApiDataAsync(LoginViewModel model)
         {
             try
             {
-                _httpClient = new HttpClient();
+               // _httpClient = new HttpClient();
                 var baseUrl = "";
                 var company = JsonConvert.SerializeObject(model);
                 var requestContent = new StringContent(company, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(baseUrl, requestContent);
                 var responseData = await response.Content.ReadAsStringAsync();
                 var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);
-                if (responseModel != null)
-                {
-                    var responseToken = JsonConvert.DeserializeObject<ResponseToken>(responseModel?.Data.ToString()!);
-                    return responseToken.Token;
 
+                if (responseModel?.Data != null)
+                {
+                    var responseToken = JsonConvert.DeserializeObject<ResponseToken>(responseModel.Data.ToString());
+                    return responseToken?.Token ?? string.Empty;
                 }
                 return string.Empty;
             }
