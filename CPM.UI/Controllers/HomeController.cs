@@ -17,13 +17,15 @@ namespace CPM.UI.Controllers
         private readonly IRegisterServices _registerServices;
         private readonly ILoginServices _loginServices;
         private readonly IEmailSendService _emailSendService;
+        private readonly ISkillServices _skillServices;
 
-        public HomeController(ILogger<HomeController> logger, IRegisterServices registerServices, ILoginServices loginServices, IEmailSendService emailSendService)
+        public HomeController(ILogger<HomeController> logger, IRegisterServices registerServices, ILoginServices loginServices, IEmailSendService emailSendService, ISkillServices skillServices)
         {
             _logger = logger;
             _registerServices = registerServices;
             _loginServices = loginServices;
             _emailSendService = emailSendService;
+            _skillServices = skillServices;
         }
         public IActionResult Index()    
         {
@@ -72,7 +74,19 @@ namespace CPM.UI.Controllers
             }
             return View();
         }
+        [HttpGet]
+        public async Task<IActionResult> GetSkills(SkillMasterViewModel model)
+        {
 
+            model ??= new SkillMasterViewModel();
+            var skill_list =await _skillServices.GetAllSkill();
+            if (skill_list != null && skill_list.Count() > 0)
+            {
+                model.SkillDto.AddRange(skill_list);
+            }
+
+            return View(model);
+        }
         public IActionResult Dashboard()
         {
             return View();

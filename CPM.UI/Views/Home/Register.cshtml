@@ -1,4 +1,4 @@
-﻿
+﻿@model SkillMasterViewModel
 @{
     
     ViewData["Title"] = "Register";
@@ -33,9 +33,13 @@
                                     <div class="mb-2">
                                         <select class="form-select" aria-label="Default select example" id="SkillId" name="SkillId">
                                             <option selected>Skill</option>
-                                            <option value="4">Psychiatrist</option>
+                                            @foreach(var skill in Model.SkillDto)
+                                            {
+                                                <option>@skill.Name</option>
+                                            }
+                                            @* <option value="4">Psychiatrist</option> 
                                             <option value="5">Orthopaedist</option>
-                                            <option value="6">Neurologist</option>
+                                            <option value="6">Neurologist</option> *@
                                         </select>
                                     </div> 
                                     <div class="mb-2">
