@@ -18,21 +18,23 @@ namespace CPM.UI.Inftrastucture.Provider
             _httpClient = httpClient;
         }
 
-        public async Task<string> PostApiDataAsync(LoginViewModel model)
+        public async Task<string> PostApiDataAsync(LoginViewModel loginViewModel)
         {
             try
             {
                 // _httpClient = new HttpClient();
-                var baseUrl = "https://localhost:7272/api/Login";
+                var baseUrl = "https://localhost:5001/api/Login";
 
-                var company = JsonConvert.SerializeObject(model);
-                var requestContent = new StringContent(company, Encoding.UTF8, "application/json");
+                var user = JsonConvert.SerializeObject(loginViewModel);
+                var requestContent = new StringContent(user, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(baseUrl, requestContent);
                 var responseData = await response.Content.ReadAsStringAsync();
                 var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);
                 if (responseModel != null)
                 {
                     var responseToken = JsonConvert.DeserializeObject<ResponseToken>(responseModel?.Data.ToString()!);
+                    //var dataJson = JsonConvert.SerializeObject(responseModel.Data);
+                    //var responseToken = JsonConvert.DeserializeObject<ResponseToken>(dataJson);
                     return responseToken.Token;
 
                 }
@@ -40,7 +42,6 @@ namespace CPM.UI.Inftrastucture.Provider
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex);
             }
             return null;
