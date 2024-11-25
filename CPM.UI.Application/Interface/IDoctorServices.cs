@@ -10,5 +10,10 @@ namespace CPM.UI.Application.Interface
     public interface IDoctorServices
     {
         Task<string> Add(DoctorMasterDto model);
+        Task<IEnumerable<DoctorMasterDto>> GetAllDoctor();
+        Task<DoctorMasterDto> GetById(int id);
+        Task<String> UpdateDoctor(int id, DoctorMasterDto model);
+        Task<string> DeleteDoctor(int id);
+
     }
 }

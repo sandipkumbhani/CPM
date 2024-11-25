@@ -16,9 +16,25 @@ namespace CPM.UI.Application.Service
         {
             _loginAdaptor = loginAdaptor;
         }
-        public Task<string> Login(LoginViewModel model)
+
+        public Task<string> AddUser(LoginDto model)
         {
-            return _loginAdaptor.PostApiDataAsync(model);
+            return  _loginAdaptor.AddUserAsync(model);
+        }
+
+        public async Task<LoginDto> GetByEmail(string email)
+        {
+         return await _loginAdaptor.GetByEmailAsync(email);
+        }
+
+        public async Task<string> Login(LoginViewModel model)
+        {
+            return await _loginAdaptor.PostApiDataAsync(model);
+        }
+
+        public async Task<string> UpdateUser(int id, LoginDto model)
+        {
+            return await _loginAdaptor.UpdateUserAsync(id, model);
         }
     }
 }

@@ -10,5 +10,8 @@ namespace CPM.UI.Domain.Interfaces
     public interface ILoginAdaptor
     {
         Task<string> PostApiDataAsync(LoginViewModel model);
+        Task<string> AddUserAsync(LoginDto model);
+        Task<string> UpdateUserAsync(int id, LoginDto model);
+        Task<LoginDto> GetByEmailAsync(string email);
     }
 }

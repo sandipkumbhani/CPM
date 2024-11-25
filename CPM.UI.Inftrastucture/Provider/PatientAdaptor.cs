@@ -9,42 +9,43 @@ using System.Threading.Tasks;
 
 namespace CPM.UI.Inftrastucture.Provider
 {
-    public class DoctorAdaptor : IDoctorAdaptor
+    public class PatientAdaptor : IPatientAdaptor
     {
         private readonly GlobalClass _globalClass;
 
-        public DoctorAdaptor(GlobalClass globalClass)
+        public PatientAdaptor(GlobalClass globalClass)
         {
             _globalClass = globalClass;
         }
 
-        public async Task<string> Addasync(DoctorMasterDto model)
+        public async Task<PatientDto> Addasync(PatientDto model)
         {
             var _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _globalClass.Token);
-            var baseUrl = "https://localhost:5001/api/Doctor/AddDoctor";
+            var baseUrl = "https://localhost:5001/api/Patient/AddPatient";
 
-            var doctor = JsonConvert.SerializeObject(model);
-            var requestContent = new StringContent(doctor, Encoding.UTF8, "application/json");
+            var patient = JsonConvert.SerializeObject(model);
+            var requestContent = new StringContent(patient, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(baseUrl, requestContent);
             var responseData = await response.Content.ReadAsStringAsync();
             var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);
-            if (responseModel != null)
+            if (response.IsSuccessStatusCode)
             {
-                var result = responseModel.StatusCode;
-                return "Success";
+                // Deserialize response data to PatientDto
+                var addedPatient = JsonConvert.DeserializeObject<PatientDto>(Convert.ToString(responseModel.Data!));
+                return addedPatient;
             }
-            return null;
+            return null; 
         }
 
-        public async Task<string> DeleteDoctorAsync(int id)
+        public async Task<string> DeletePatientAsync(int id)
         {
             var _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _globalClass.Token);
-            var baseUrl = "https://localhost:5001/api/Doctor/DeleteDoctor/" + id;
+            var baseUrl = "https://localhost:5001/api/Patient/DeletePatient/" + id;
 
-            var doctor = JsonConvert.SerializeObject(id);
-            var requestContent = new StringContent(doctor, Encoding.UTF8, "application/json");
+            var patient = JsonConvert.SerializeObject(id);
+            var requestContent = new StringContent(patient, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(baseUrl, requestContent);
             var responseData = await response.Content.ReadAsStringAsync();
             var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);
@@ -53,47 +54,47 @@ namespace CPM.UI.Inftrastucture.Provider
                 var result = responseModel.StatusCode;
                 return "Success";
             }
-            return null;
+            return null; 
         }
 
-        public async Task<IEnumerable<DoctorMasterDto>> GetAllDoctorAsync()
+        public async Task<IEnumerable<PatientDto>> GetAllPatientAsync()
         {
             var _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _globalClass.Token);
-            var response = await _httpClient.GetAsync("https://localhost:5001/api/Doctor/GetAllDoctor");
+            var response = await _httpClient.GetAsync("https://localhost:5001/api/Patient/GetAllPatient");
             var responseData = await response.Content.ReadAsStringAsync();
             var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);
             if (responseModel != null)
             {
-                var Doctor = JsonConvert.DeserializeObject<List<DoctorMasterDto>>(Convert.ToString(responseModel.Data!));
-                return Doctor;
+                var patient = JsonConvert.DeserializeObject<List<PatientDto>>(Convert.ToString(responseModel.Data!));
+                return patient;
             }
             return null;
         }
 
-        public async Task<DoctorMasterDto> GetByIdAsync(int id)
+        public async Task<PatientDto> GetByIdAsync(int id)
         {
             var _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _globalClass.Token);
-            var response = await _httpClient.GetAsync("https://localhost:5001/api/Doctor/GetDoctorById/" + id);
+            var response = await _httpClient.GetAsync("https://localhost:5001/api/Patient/GetPatientById/" + id);
             var responseData = await response.Content.ReadAsStringAsync();
             var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);
             if (responseModel != null)
             {
-                var details = JsonConvert.DeserializeObject<DoctorMasterDto>(Convert.ToString(responseModel.Data!));
-                return details;
+                var patient = JsonConvert.DeserializeObject<PatientDto>(Convert.ToString(responseModel.Data!));
+                return patient;
             }
             return null;
         }
 
-        public async Task<string> UpdateDoctorAsync(int id, DoctorMasterDto model)
+        public async Task<string> UpdatePatientAsync(int id, PatientDto model)
         {
             var _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _globalClass.Token);
-            var baseUrl = "https://localhost:5001/api/Doctor/UpdateDoctor/" + id;
+            var baseUrl = "https://localhost:5001/api/Patient/UpdatePatient/" + id;
 
-            var doctor = JsonConvert.SerializeObject(model);
-            var requestContent = new StringContent(doctor, Encoding.UTF8, "application/json");
+            var patient = JsonConvert.SerializeObject(model);
+            var requestContent = new StringContent(patient, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(baseUrl, requestContent);
             var responseData = await response.Content.ReadAsStringAsync();
             var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);

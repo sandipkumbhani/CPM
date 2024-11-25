@@ -12,9 +12,15 @@ namespace CPM.UI.Application.Service
     public class SkillServices : ISkillServices
     {
         private readonly ISkillAdaptor _skillAdaptor;
-        public Task<IEnumerable<SkillMasterDto>> GetAllSkill()
+
+        public SkillServices(ISkillAdaptor skillAdaptor)
         {
-            return _skillAdaptor.GetAllSkillAsync();
+            _skillAdaptor = skillAdaptor;
+        }
+
+        public async Task<IEnumerable<SkillMasterDto>> GetAllSkill()
+        {
+            return await _skillAdaptor.GetAllSkillAsync();
         }
     }
 }

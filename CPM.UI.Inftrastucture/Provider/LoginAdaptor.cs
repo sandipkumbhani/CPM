@@ -12,10 +12,47 @@ namespace CPM.UI.Inftrastucture.Provider
     public class LoginAdaptor : ILoginAdaptor
     {
         private readonly HttpClient _httpClient;
+        private readonly GlobalClass _globalClass;
 
-        public LoginAdaptor(HttpClient httpClient)
+
+        public LoginAdaptor(HttpClient httpClient, GlobalClass globalClass)
         {
             _httpClient = httpClient;
+            _globalClass = globalClass;
+        }
+
+        public async Task<string> AddUserAsync(LoginDto model)
+        {
+            var _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _globalClass.Token);
+            var baseUrl = "https://localhost:5001/api/Login/AddUser";
+            var user = JsonConvert.SerializeObject(model);
+            var requestContent = new StringContent(user, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(baseUrl, requestContent);
+            var responseData = await response.Content.ReadAsStringAsync();
+            var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);
+            if (responseModel != null)
+            {
+                var result = responseModel.StatusCode;
+                return "Success";
+            }
+            return null;
+        }
+
+        public async Task<LoginDto> GetByEmailAsync(string email)
+        {
+            var _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _globalClass.Token);
+            var response = await _httpClient.GetAsync("https://localhost:5001/api/Login/GetByEmail/" + email);
+            var responseData = await response.Content.ReadAsStringAsync();
+            var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);
+            if (responseModel != null && responseModel.StatusCode==200)
+            {
+                var user = JsonConvert.DeserializeObject<LoginDto>(Convert.ToString(responseModel.Data!));
+                return user;
+            }
+
+            return null;
         }
 
         public async Task<string> PostApiDataAsync(LoginViewModel loginViewModel)
@@ -33,8 +70,6 @@ namespace CPM.UI.Inftrastucture.Provider
                 if (responseModel != null)
                 {
                     var responseToken = JsonConvert.DeserializeObject<ResponseToken>(responseModel?.Data.ToString()!);
-                    //var dataJson = JsonConvert.SerializeObject(responseModel.Data);
-                    //var responseToken = JsonConvert.DeserializeObject<ResponseToken>(dataJson);
                     return responseToken.Token;
 
                 }
@@ -44,6 +79,26 @@ namespace CPM.UI.Inftrastucture.Provider
             {
                 Console.WriteLine(ex);
             }
+            return null;
+        }
+
+        public async Task<string> UpdateUserAsync(int id, LoginDto model)
+        {
+            var _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _globalClass.Token);
+            var baseUrl = "https://localhost:5001/api/Login/UpdateUser/" + id;
+
+            var user = JsonConvert.SerializeObject(model);
+            var requestContent = new StringContent(user, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync(baseUrl, requestContent);
+            var responseData = await response.Content.ReadAsStringAsync();
+            var responseModel = JsonConvert.DeserializeObject<CommanResponseDto>(responseData);
+            if (responseModel != null)
+            {
+                var result = responseModel.StatusCode;
+                return "Success";
+            }
+
             return null;
         }
 

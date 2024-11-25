@@ -21,13 +21,13 @@ namespace CPM.UI.Application.Service
                 _configuration = configuration;
                 _logger = logger;
             }
-        public void SendEmail(string Email)
+        public void SendEmail(string Email,string pwd)
         {
             try
             {
                 var fromEmail = new MailAddress(_configuration["EmailSetting:SenderEmail"], _configuration["EmailSetting:EmailHeader"]);
                 var toEmail = new MailAddress(Email);
-                string password = PasswordGenerator.GenerateRandomPassword();
+                string password = pwd;
                 string body = "Email Id :" + Email.ToString();
                 body += "<br>";
                 body += "Password :" + password.ToString();

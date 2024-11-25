@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace CPM.UI.Domain.Model
 {
-
     public class RegisterViewModel
     {
         public RegisterViewModel()
@@ -22,7 +21,7 @@ namespace CPM.UI.Domain.Model
         public int Id { get; set; } 
         public string? ClinicName { get; set; }
         public string? DoctorName { get; set; }
-        public int SkillId { get; set; }
+        public int? SkillId { get; set; } = null;
         [EmailAddress]
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }

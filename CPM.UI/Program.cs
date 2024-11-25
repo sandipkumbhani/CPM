@@ -6,21 +6,21 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 var globalclass = new GlobalClass();
-// Add services to the container.
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddApplicationService();
 builder.Services.AddEfcoreInfrastrucureService();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
+builder.Services.AddSingleton(globalclass);
 
-//builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-//{
-//    options.SignIn.RequireConfirmedAccount = false;
-   
-//}).AddRoles<IdentityRole>() //Register authorization
-
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
+});
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -38,6 +38,10 @@ app.Use(async (context, next) =>
     {
         globalclass.Token = token;
     }
+    else
+    {
+        globalclass.Token = token;
+    }
     await next.Invoke();
 });
 
@@ -50,6 +54,18 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Register}/{id?}");
+    pattern: "{controller=Home}/{action=Login}/{id?}");
 
 app.Run();
+
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("RequireAdministratorRole",
+//         policy => policy.RequireRole("Admin"));
+//});
+
+//builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+//{
+//    options.SignIn.RequireConfirmedAccount = false;
+
+//}).AddRoles<IdentityRole>() //Register authorization

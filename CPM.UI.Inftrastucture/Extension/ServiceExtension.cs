@@ -18,6 +18,9 @@ namespace CPM.UI.Inftrastucture.Extension
             services.AddScoped<ILoginAdaptor, LoginAdaptor>();
             services.AddScoped<IClinicAdaptor, ClinicAdaptor>();
             services.AddScoped<IDoctorAdaptor, DoctorAdaptor>();
+            services.AddScoped<ISkillAdaptor, SkillAdaptor>();
+            services.AddScoped<IPatientAdaptor, PatientAdaptor>();
+            services.AddScoped<IPatientDiagnosisAdaptor, PatientDiagnosisAdaptor>();
             return services;
         }
     }

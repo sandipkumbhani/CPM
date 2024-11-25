@@ -16,9 +16,29 @@ namespace CPM.UI.Application.Service
         {
             _clinicAdaptor = clinicAdaptor;
         }
-        public Task<string> Add(ClinicMasterDto model)
+        public async Task<string> Add(ClinicMasterDto model)
         {
-            return _clinicAdaptor.Addasync(model);
+            return await _clinicAdaptor.Addasync(model);
+        }
+
+        public Task<string> DeleteClinic(int id)
+        {
+            return _clinicAdaptor.DeleteClinicAsync(id);
+        }
+
+        public async Task<IEnumerable<ClinicMasterDto>> GetAll()
+        {
+            return await _clinicAdaptor.GetAllClinicAsync();
+        }
+
+        public async Task<ClinicMasterDto> GetById(int id)
+        {
+            return await _clinicAdaptor.GetByIdAsync(id);
+        }
+
+        public async Task<string> UpdateClinic(int id, ClinicMasterDto model)
+        {
+            return await _clinicAdaptor.UpdateClinicAsync(id, model);
         }
     }
 }
