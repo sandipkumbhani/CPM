@@ -1,8 +1,92 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model PatientDiagnosisViewModel
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/css/stylesheet.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="StyleSheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <title>Dashboard</title>
+</head>
+<body>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <div class="container-fluid" style="margin-top:-10px;margin-left:-110px;">
+        <div class="row flex-nowrap">
+            <div class="d-flex flex-column  flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px;height:600px;background-color:#f2f8f8;">
+                <a href="#" class="d-flex align-items-center mb-1 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                    <span class="fs-4 text-center das_title">
+                        <i class="fa-solid fa-hospital fa-sm" style="color: #000000;margin-right: 0.7rem;"></i>CPM
+                    </span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="https://localhost:7240/home/Dashboard" class="nav-link active" aria-current="page">
+                            <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                            <i class="fa-solid fa-gauge-simple fa-lg" style="color: #ffffff;margin-right: 0.7rem;"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="https://localhost:7240/home/Clinic" class="nav-link link-body-emphasis das_title">
+                            <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                            <i class="fa-solid fa-house-medical fa-lg" style="color: #000000;margin-right: 0.7rem;"></i>Clinic
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="https://localhost:7240/home/Doctor" class="nav-link link-body-emphasis das_title">
+                            <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                            <i class="fa-solid fa-user-doctor fa-lg" style="color: #050505;margin-right: 0.7rem;"></i>Doctors
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="rightSide">
+
+        <header>
+            <h4 style="padding: 1px;">
+                Patient
+            </h4>
+        </header>
+        <button id="addbtnShowModal" type="button" class="btn btn-primary">ADD<i class="fa-solid fa-plus" style="color: #ffffff;"></i></button>
+        <div class="row">
+            <div class="col-md-4" style="display:flex;margin-top:10px;">
+                <div class="form-inline smallsize" style=" display: flex;">
+                    <input type="text" class="form-control" id="searchtext" placeholder="" />
+                </div>
+                <button id="search" onclick="search()" class="btn btn-primary" style="margin-left:10px">
+                    Search
+                    @* <i class="fa-solid fa-magnifying-glass" style="color: #74C0FC;"></i> *@
+                </button>
+            </div>
+        </div>
+        <table class="table table-borded" id="tabledata">
+            <thead>
+                <tr>
+                    <th class="h6">Name</th>
+                    <th class="h6">Mobile NO.</th>
+                    <th class="h6">Address</th>
+                    <th class="h6">View</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var patient in Model.PatientDiagnosisDto)
+                {
+                    <tr>
+                        <td>@patient.Patient.Name</td>
+                        <td>@patient.Patient.MobileNo</td>
+                        <td>@patient.Patient.Address</td>
+                        <td><button asp-route-id="@patient.PatientId" id="view" onclick="GetPatient(@patient.PatientId)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" data-content="New content loaded!">View</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

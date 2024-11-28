@@ -1,5 +1,5 @@
 html {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 
 @media (min-width: 768px) {
@@ -19,4 +19,24 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+.card-body {
+    padding:2rem 2rem !important;
+}
+.das_title{
+    color:black !important;
+}
+.rightSide {
+    margin-left: 200px;
+    margin-top: -550px;
+}
+.mrg-btn {
+    margin-bottom:-5px;
+    margin-top:-7px;
+}
+.upload {
+    height: 33px !important;
+    border: 1px solid lightgray !important;
+    font-size: small !important;
+    margin-left: 5px;
 }

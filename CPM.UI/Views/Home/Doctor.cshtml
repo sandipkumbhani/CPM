@@ -1,0 +1,121 @@
+﻿@model DoctorMasterViewModel
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/css/stylesheet.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="StyleSheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <title>Doctor</title>
+</head>
+<body>
+
+    <div class="container-fluid" style="margin-top:-10px;margin-left:-120px;">
+        <div class="row flex-nowrap">
+            <div class="d-flex flex-column  flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px;height:600px;background-color:#f2f8f8;">
+                <a href="#" class="d-flex align-items-center mb-1 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                    <span class="fs-4 text-center das_title">
+                        <i class="fa-solid fa-hospital fa-sm" style="color: #000000;margin-right: 0.7rem;"></i>@ViewBag.clinic
+                    </span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="https://localhost:7240/home/Dashboard" class="nav-link link-body-emphasis das_title">
+                            <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                            <i class="fa-solid fa-gauge-simple fa-lg" style="color: #000000;margin-right: 0.7rem;"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="https://localhost:7240/home/Clinic" class="nav-link link-body-emphasis das_title">
+                            <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                            <i class="fa-solid fa-house-medical fa-lg" style="color: #000000;margin-right: 0.7rem;"></i>Clinic
+                        </a>
+                    </li>
+                    @if (ViewBag.role != "Admin")
+                    {
+                        <li class="nav-item">
+                            <a href="https://localhost:7240/home/Doctor" class="nav-link active" aria-current="page">
+                                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                                <i class="fa-solid fa-user-doctor fa-lg" style="color: #ffffff;margin-right: 1.0rem;"></i>User
+                            </a>
+                        </li>
+                    }
+                    @if(ViewBag.role == "Doctor")
+                    {
+                        <li class="nav-item">
+                            <a href="https://localhost:7240/home/Patient" class="nav-link link-body-emphasis das_title">
+                                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                                <i class="fa-solid fa-users fa-lg" style="color: #050505;margin-right: 0.8rem;margin-left:-0.3rem;"></i>Patient
+                            </a>
+                        </li>
+                    }
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="rightSide">
+        <header>
+            <h4 style="padding: 1px;">
+                User
+            </h4>
+        </header>
+        <table class="table table-borded" id="tabledata">
+            <thead>
+                <tr>
+                    <th class="h6">Name</th>
+                    <th class="h6">Skill</th>
+                    <th class="h6">Clinic Name</th>
+                    <th class="h6">Contact No.</th>
+                    <th class="h6">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                        @foreach (var Doctor in Model.DoctorDto)
+                        {
+                            <tr>
+                                 <td>@Doctor.Name</td>
+                                 <td>@Doctor.SkillMaster.Name</td>
+                                 <td>@Doctor.ClinicMaster.Name</td>
+                                 <td>@Doctor.DoctorNo</td>
+                                 <td>@Doctor.RoleMaster.RoleName</td>
+                            </tr>
+                        }
+            </tbody>
+        </table>
+        </div>
+     @*    <script>
+        function LoadData() {
+            $.ajax({
+                url: '/Home/GetDoctors',
+                type: "GET",
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+
+                    $("#tabledata tbody").empty();
+                    $.each(data.DoctorMasterDto, function (index, detail) {
+                        var row = "<tr>"
+                            + "<td>" + detail.name + "</td>"
+                            // + "<td>" + item.itemName + "</td>"
+                            // + "<td>" + item.description + "</td>"
+                            + "</tr>";
+                        $("#tabledata tbody").append(row);
+                    });
+                },
+                error: function () {
+                    alert("Error loading data");
+                }
+            });
+        });
+        }
+        </script> *@
+</body>
+</html>

@@ -1,0 +1,480 @@
+﻿@model PatientDiagnosisViewModel
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/css/stylesheet.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="StyleSheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <title>Dashboard</title>
+</head>
+<body>
+  
+    <div class="container-fluid" style="margin-top:-10px;margin-left:-120px;">
+        <div class="row flex-nowrap">
+            <div class="d-flex flex-column  flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px;height:600px;background-color:#f2f8f8;">
+                <a href="#" class="d-flex align-items-center mb-1 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                    <span class="fs-4 text-center das_title">
+                        <i class="fa-solid fa-hospital fa-sm" style="color: #000000;margin-right: 0.7rem;"></i>@ViewBag.clinic
+                    </span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="https://localhost:7240/home/Dashboard" class="nav-link active" aria-current="page" >
+                            <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                            <i class="fa-solid fa-gauge-simple fa-lg" style="color: #ffffff;margin-right: 0.7rem;"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="https://localhost:7240/home/Clinic" class="nav-link link-body-emphasis das_title">
+                            <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                            <i class="fa-solid fa-house-medical fa-lg" style="color: #000000;margin-right: 0.7rem;"></i>Clinic
+                        </a>
+                    </li>
+                    @if (ViewBag.role != "Admin")
+                    {
+                        <li class="nav-item">
+                            <a href="https://localhost:7240/home/Doctor" class="nav-link link-body-emphasis das_title">
+                                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                                <i class="fa-solid fa-user-doctor fa-lg" style="color: #050505;margin-right: 1.0rem;"></i>User
+                            </a>
+                        </li>
+                    }
+                    @if (ViewBag.role == "Doctor")
+                    {
+                        <li class="nav-item">
+                            <a href="https://localhost:7240/home/Patient" class="nav-link link-body-emphasis das_title">
+                                <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                                <i class="fa-solid fa-users fa-lg" style="color: #050505;margin-right: 0.8rem;margin-left:-0.3rem;"></i>Patient
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+        <div class="rightSide">
+
+        <header>
+            <h4 style="padding: 1px;">
+                Patient
+            </h4>
+        </header>
+        
+        @* <button id="addbtnShowModal" type="button" class="btn btn-primary">ADD<i class="fa-solid fa-plus" style="color: #ffffff;"></i></button> *@
+        <div class="row">
+            <div class="col-md-4" style="display:flex;margin-top:10px;">
+                <div class="form-inline smallsize" style=" display: flex;">
+                    <input type="text"  class="form-control" id="searchtext" placeholder="" />
+                </div>
+                <button id="search" onclick="search()" class="btn btn-primary" style="margin-left:10px">
+                    Search
+                    @* <i class="fa-solid fa-magnifying-glass" style="color: #74C0FC;"></i> *@
+                </button>
+            </div>
+        </div>
+        <table class="table table-borded" id="tabledata">   
+            <thead>
+                <tr>
+                    <th class="h6">No.</th>
+                    <th class="h6">Name</th>
+                    <th class="h6">Mobile NO.</th>
+                    <th class="h6">Address</th>
+                    @if (ViewBag.role == "Doctor")
+                    {
+                        <th class="h6">View</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach(var dignosis in Model.PatientDiagnosisDto)
+                {
+                    <tr>
+                        <td>@i</td>
+                        @{
+                            i++;
+                        }
+                        <td>@dignosis.Patient.Name</td>
+                        <td>@dignosis.Patient.MobileNo</td>
+                        <td>@dignosis.Patient.Address</td>
+                        @if (ViewBag.role == "Doctor")
+                        {
+                            <td><button asp-route-id="@dignosis.PatientId" id="view" onclick="GetPatient(@dignosis.PatientId)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" data-content="New content loaded!">View</button></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!--Add Patient Model-->
+    <div class="modal fade" tabindex="-1" id="patientModal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                  <div class="modal-header">  
+                      <h4 class="modal-title">Add Patient</h4>
+                    <button type="button" class="btn-close" id="addbtnHideModal" data-dismiss="modal" aria-label="Close"></button>
+                  </div>  
+                  <div class="modal-body">  
+                    <form id="patientForm">
+                        <div id="additionalFields"></div>
+                    </form>
+                  </div>
+            </div>
+        </div>
+    </div>
+    <!--View Patient Model-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Patient Details</h5>
+                    <button type="button" class="btn-close" id="viewbtnHideModal" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="patientdetails"></div>
+                    <form method="put" enctype="multipart/form-data">
+                       <div id="additionadetails"></div>
+                   </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        $(document).ready(function () {
+            $("#viewbtnShowModal").click(function () {
+                $("#myModal").modal('show');
+            });
+
+            $("#viewbtnHideModal").click(function () {
+                $("#myModal").modal('hide');
+            });
+        });
+       
+        function search() {
+            var searchtext = $('#searchtext').val();
+            console.log(searchtext);
+            $.ajax({
+                url: '/Home/SearchPatient',
+                dataType: "json",
+                data: { searchtext },
+                success: function (result) {
+
+                 console.log(result);
+                        $('#additionalFields').empty(); 
+                        if(result.length == 0)
+                        {
+                              $('#additionalFields').append(`
+                       <div class="row">
+                         <div class="col-md-6">
+                             <label class="control-label" for="Name">Name</label>
+                             <input class="form-control" id="Name" name="Name" />
+                         </div>
+                         <div class="col-md-6">
+                             <label class="control-label" for="MobileNo">Mobile No.</label>
+                             <input class="form-control" id="MobileNo" name="MobileNo" />
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <label class="control-label" for="Address">Address</label>
+                         <input class="form-control" id="Address" name="Address" />
+                     </div>
+                     <div class="row mb-2">
+                         <div class="col-md-4">
+                             <label class="control-label" for="Weight">weight</label>
+                             <input class="form-control" id="Weight" name="Weight" />
+                         </div>
+                         <div class="col-md-4">
+                             <label class="control-label" for="Height">Height</label>
+                             <input class="form-control" id="Height" name="Height" />
+                         </div>
+                     </div>
+                     <div class="row">
+                             <div class="col-md-2">
+                                 <label class="form-label">Smoking</label>
+                             </div>
+
+                             <div class="col">
+                                 <div class="rado" style="display:flex; margin-left:-20px;" >
+                                     <div class="form-check" style="margin-right:10px;">
+                                     <input class="form-check-input" type="radio" name="SmokingOrNicotine" value="Yes" id="SmokingOrNicotine1">
+                                     <label class="form-check-label" for="SmokingOrNicotine1">Yes  </label>
+                                     </div>
+                                     <div class="form-check">
+                                     <input class="form-check-input" type="radio" name="SmokingOrNicotine" value="No" id="SmokingOrNicotine2">
+                                     <label class="form-check-label" for="SmokingOrNicotine2">No</label>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col-md-2">
+                                 <label class="form-label">Physically abled</label>
+                             </div>
+
+                             <div class="col">
+                                 <div class="rado" style="display:flex; margin-left:-20px;">
+                                     <div class="form-check" style="margin-right:10px;">
+                                     <input class="form-check-input" type="radio" name="Physically_abled" value="Yes" id="Physically_abled1">
+                                     <label class="form-check-label" for="Physically_abled1">Yes  </label>
+                                     </div>
+                                     <div class="form-check">
+                                     <input class="form-check-input" type="radio" name="Physically_abled" value="No" id="Physically_abled2">
+                                     <label class="form-check-label" for="Physically_abled2">No</label>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col-md-2">
+                                 <label class="form-label">IsDiabatice</label>
+                             </div>
+
+                             <div class="col">
+                                 <div class="rado" style="display:flex; margin-left:-20px;">
+                                     <div class="form-check" style="margin-right:10px;">
+                                     <input class="form-check-input" type="radio" name="isDiabatice" value="Yes" id="isDiabatice1">
+                                     <label class="form-check-label" for="isDiabatice1">Yes  </label>
+                                     </div>
+                                     <div class="form-check">
+                                     <input class="form-check-input" type="radio" name="isDiabatice" value="No" id="isDiabatice2">
+                                     <label class="form-check-label" for="isDiabatice2">No</label>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                                                  <div class="row">
+                             <div class="col-md-2">
+                                 <label class="form-label">BP</label>
+                             </div>
+
+                             <div class="col">
+                                 <div class="rado" style="display:flex; margin-left:-20px;">
+                                     <div class="form-check" style="margin-right:10px;">
+                                     <input class="form-check-input" type="radio" name="BP" value="Yes" id="BP1">
+                                     <label class="form-check-label" for="BP1">Yes  </label>
+                                     </div>
+                                     <div class="form-check">
+                                     <input class="form-check-input" type="radio" name="BP" value="No" id="BP2">
+                                     <label class="form-check-label" for="BP2">No</label>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                          <div class="row">
+                         <div>
+                             <input class="form-check-input" type="checkbox" id="IsQueue" name="IsQueue" value="true" aria-label="...">
+                             <label class="form-check-label" for="IsQueue">Add Queue</label>
+                         </div>
+                     </div>
+                     <div class="modal-footer">
+                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                         <button type="button" class="btn btn-primary" id="savebutton" onclick="savepatient()">Save</button>
+                     </div>
+                        `);
+                        }
+                        else
+                        {
+                             $('#additionalFields').append(`
+                              <div class="row">
+                                 <div>
+                                     <input class="form-check-input" type="checkbox" id="IsQueue" name="IsQueue" value="true" aria-label="...">
+                                     <label class="form-check-label" for="IsQueue">Add Queue</label>
+                                 </div>
+                             </div>
+                             <div class="modal-footer">
+                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                                 <button type="button" class="btn btn-primary" onclick="AddDignosis(${result[0].patientId})">Save</button>
+                             </div>
+                            `);
+                        }
+                      
+                        // Show the modal
+                        $('#patientModal').modal('show');
+                  $("#addbtnHideModal").click(function () {
+                        $("#patientModal").modal('hide');
+                  });
+                }
+            });
+        }
+
+       
+        function AddDignosis(id)
+        {
+           console.log("Add dignosis");
+           console.log(id);
+           var PatientViewModel = {
+               patientId : id,
+           }
+           var isqueue= $("#IsQueue").is(":checked");
+           console.log(PatientViewModel);
+                console.log(isqueue);
+                 $.ajax({
+                    type: "POST",
+                    url: "/Home/AddPatient?IsQueue=" + isqueue,
+                    data: JSON.stringify(PatientViewModel),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                        if (result.result == "success") {
+                        window.location = "https://localhost:7240/home/Dashboard";
+                        } else {
+                            alert("Failed to save Patient.");
+                        }
+                    },
+                });
+        }
+        function savepatient()
+        {
+            console.log("Add Dignosis with patient");
+            var PatientViewModel = {
+                    name: $("#Name").val(),
+                    mobileNo: $("#MobileNo").val(),
+                    address: $("#Address").val(),
+                    weight: $("#Weight").val(),
+                    height: $("#Height").val(),
+                    smokingOrNicotine: $("input[name='SmokingOrNicotine']:checked").val(),
+                    physically_abled: $('input[name="Physically_abled"]:checked').val(),
+                    isdiabatice: $('input[name="isDiabatice"]:checked').val(),
+                    bp: $('input[name="BP"]:checked').val(),
+            }
+                 var isqueue= $("#IsQueue").is(":checked");
+                console.log(PatientViewModel);
+                console.log(isqueue);
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/AddPatient?IsQueue=" + isqueue,
+                    data: JSON.stringify(PatientViewModel),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(data);
+                        if (result.result == "success") {
+                             window.location = "https://localhost:7240/home/Dashboard";
+                        } else {
+                        }
+                    },
+                });
+        }
+        function GetPatient(id) {
+            $.ajax({
+                url: '/Home/GetPatintDignosis',
+                datatype: 'html',
+                method: 'GET',
+                data: { 'id': id },
+                success: function (result) {
+                    $('#table').html('');
+                    console.log(result);
+                    console.log(result[0].id);
+                    $('#patientdetails').empty();
+                    if(result.length==1)
+                    {
+                        $('#patientdetails').append(`
+                                            <p>Name : ${result[0].patient.name}  &nbsp;&nbsp;&nbsp;&nbsp;
+                                             Mobile No : ${result[0].patient.mobileNo}</p>
+                                             <p>Address : ${result[0].patient.address} </p>
+                                            <p>Weight : ${result[0].patient.weight}  &nbsp;&nbsp;&nbsp;&nbsp;
+                                            Hight : ${result[0].patient.height}</p>
+                                          <p>Smoking Or Nicotine : ${result[0].patient.smokingOrNicotine}</p>
+                                       <p>Physically Abled : ${result[0].patient.physically_abled}</p>
+                                    <p>IsDiabatice : ${result[0].patient.isDiabatice}</p>
+                                    `);
+                    }
+                    else
+                    {
+                                $('#patientdetails').append(`
+                                <p>Last Visit : ${result[1].visitedDateTime}</p>
+                            <p>Name : ${result[1].patient.name}  &nbsp;&nbsp;&nbsp;&nbsp;
+                             Mobile No : ${result[1].patient.mobileNo}</p>
+                             <p>Address : ${result[1].patient.address} </p>
+                                    <div class="row mb-2" >
+                                         <div class="col-md-2">
+                                     <label class="control-label" for="Weight">weight</label>
+                                             <input class="form-control" id="Weight" name="Weight" value="${result[1].patient.weight}" />
+                                 </div>
+                                 <div class="col-md-2">
+                                     <label class="control-label" for="Height">Height</label>
+                                                     <input class="form-control" id="Height" name="Height" value="${result[1].patient.height} "/>
+                                 </div>
+                             </div>
+                           <p>Smoking Or Nicotine : ${result[1].patient.smokingOrNicotine}</p>
+                           <p>Physically Abled : ${result[1].patient.physically_abled}</p>
+                          <p>IsDiabatice : ${result[1].patient.isDiabatice}</p>
+                       <p>BP: ${result[1].patient.bp}</p>
+                             <p>Comment: ${result[1].comments}   &nbsp;&nbsp;&nbsp;&nbsp;
+                                prescription: ${result[1].prescription} &nbsp;&nbsp;&nbsp;&nbsp;
+                  FoodSuggestions: ${result[1].foodSuggestions}</p>
+                    `);
+                    }
+                    
+                    $('#additionadetails').empty();
+                    $('#additionadetails').append(` 
+                              <div class="form-group mb-2">
+                                         <label class="control-label" for="Comments">Comments</label>
+                                          <input class="form-control" id="Comments" name="Comments" />
+                              </div>
+                           
+                                <div class="form-group">
+                                        <label class="control-label" for="prescription">Prescription</label>
+                                        <input class="form-control" id="prescription" name="prescription" />
+                                </div>
+                           <div class="form-group">
+                                      <label class="control-label" for="FoodSuggestions">Food Suggestion</label>
+                                     <input class="form-control" id="FoodSuggestions" name="FoodSuggestions" />
+                          </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                       <button type="button" class="btn btn-primary" onclick="UpdateDignosis(${result[0].id},${result[0].patientId})">Save</button>
+                        </div>
+                    `)
+
+                 //    $("#myModal .modal-body").html(details);
+                    $("#myModal").modal('show');
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+
+        function UpdateDignosis(id, patientId) {
+            var dignosisViewModel = {
+                id: id,
+                patientId: patientId,
+                comments: $("#Comments").val(),
+               // Reports: filename,
+                prescription: $("#prescription").val(),
+                foodSuggestions: $("#FoodSuggestions").val(),
+            }
+            console.log(dignosisViewModel);
+            $.ajax({
+                type: "put",
+                url: "/home/updateDignosis",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(dignosisViewModel),
+                datatype: "json",
+                success: function (result) {
+                    if (result.result == "success") {
+                        window.location = "https://localhost:7240/home/Dashboard";
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $("#datadiv").html("error: " + status + " " + error + " " + xhr.status + " " + xhr.statustext);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

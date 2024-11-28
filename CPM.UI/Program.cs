@@ -1,10 +1,26 @@
-var builder = WebApplication.CreateBuilder(args);
+using CPM.UI.Application.Extension;
+using CPM.UI.Inftrastucture.Extension;
+using Microsoft.AspNetCore.Identity;
+using CPM.UI.Domain.Model;
+using System;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+var globalclass = new GlobalClass();
+
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
+builder.Services.AddApplicationService();
+builder.Services.AddEfcoreInfrastrucureService();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton(globalclass);
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
+});
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -12,6 +28,22 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.Use(async (context, next) =>
+{
+    // Read a specific cookie
+    var token = context.Request.Cookies["AuthToken"];
+
+    if (token != null)
+    {
+        globalclass.Token = token;
+    }
+    else
+    {
+        globalclass.Token = token;
+    }
+    await next.Invoke();
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -22,6 +54,18 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Login}/{id?}");
 
 app.Run();
+
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("RequireAdministratorRole",
+//         policy => policy.RequireRole("Admin"));
+//});
+
+//builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+//{
+//    options.SignIn.RequireConfirmedAccount = false;
+
+//}).AddRoles<IdentityRole>() //Register authorization
